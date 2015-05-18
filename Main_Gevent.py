@@ -7,6 +7,10 @@ import ggc_ip, socket, time, os, json
 from multiprocessing.dummy import Pool as ThreadPool 
 import SSL_Test2
 import Socket_Test
+import gogo_cfg
+cfg = gogo_cfg.gogo_cfg()
+sock_thread_num = float(cfg.get("TPool", "sock_thread_num"))
+ssl_thread_num = float(cfg.get("TPool", "ssl_thread_num"))
 import gevent
 from gevent import coros
 Lock = coros.Semaphore()
@@ -81,8 +85,8 @@ def SSL_TestNext():
 
 		
 
-jobs = [gevent.spawn(Socket_TestNext, ippool) for i in range(75)]  
-jobs.extend([gevent.spawn(SSL_TestNext ) for i in range(60)])
+jobs = [gevent.spawn(Socket_TestNext, ippool) for i in range(int(sock_thread_num))]  
+jobs.extend([gevent.spawn(SSL_TestNext ) for i in range(int(ssl_thread_num))])
 
 #print jobs
 try:

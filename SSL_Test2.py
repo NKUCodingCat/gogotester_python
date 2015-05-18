@@ -8,6 +8,12 @@ import os
 import platform
 import random
 import re
+import gogo_cfg
+
+cfg = gogo_cfg.gogo_cfg()
+socket_timeout = float(cfg.get("SSL", "socket_timeout"))
+ssl_timeout = float(cfg.get("SSL", "ssl_timeout"))
+
 root = os.path.split(os.path.realpath(__file__))[0]+"/"
 RxResult = re.compile("""^(HTTP/... (\d+).*|Server:\s*(\w.*))$""", re.IGNORECASE|re.MULTILINE)
 
@@ -37,9 +43,9 @@ def SSL_Test(ip):
 	"""
 	try:
 		s = socket.socket()  
-		s.settimeout(10)  
+		s.settimeout(socket_timeout)  
 		c = ssl.wrap_socket(s, cert_reqs=ssl.CERT_REQUIRED, ca_certs=root+'cacert.pem')  
-		c.settimeout(10)  
+		c.settimeout(ssl_timeout)  
 		c.connect((ip, 443))  
 		cert = c.getpeercert()  
 		c.write("HEAD /search?q=g HTTP/1.1\r\nHost: www.google.com.hk\r\n\r\nGET /%s HTTP/1.1\r\nHost: azzvxgoagent%s.appspot.com\r\nConnection: close\r\n\r\n"%(platform.python_version() , random.randrange(7)))
@@ -49,6 +55,7 @@ def SSL_Test(ip):
 	except KeyboardInterrupt:
 		raise
 	except:
+		#raise
 		return None
 	if status:
 		return {"ip": ip, "cname": Cer, "Status": status}
