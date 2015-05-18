@@ -86,8 +86,8 @@ jobs.extend([gevent.spawn(SSL_TestNext ) for i in range(60)])
 
 #print jobs
 try:
-	log = open(root+"res.txt", "w")
-	res_out = open(root+"final.txt", "w")
+	log = open(root+"log.log", "w")
+	res_out = open(root+"ip_ava.txt", "w")
 	gevent.joinall(jobs)
 	res_out.write(json.dumps(Succ))
 
