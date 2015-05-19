@@ -3,10 +3,11 @@ monkey.patch_os()
 monkey.patch_socket()
 monkey.patch_ssl()
 
-import ggc_ip, socket, time, os, json
+import ggc_ip, socket, time, os, json, random
 from multiprocessing.dummy import Pool as ThreadPool 
 import SSL_Test2
 import Socket_Test
+import HTMLGEN
 import gogo_cfg
 cfg = gogo_cfg.gogo_cfg()
 sock_thread_num = float(cfg.get("TPool", "sock_thread_num"))
@@ -34,7 +35,7 @@ def Socket_TestNext(ippool):
 	while not isEnd:
 		try:
 			Lock.acquire()
-			ip = ippool.pop()
+			ip = ippool.pop(random.randrange(len(ippool)))
 			Lock.release()
 			if len(ippool)%1000 == 0:
 				print len(Succ),"/",len(ippool), "/",len(Wait_for_SSL),"/",len(InProcess)
@@ -49,7 +50,7 @@ def Socket_TestNext(ippool):
 		except KeyboardInterrupt:
 			isEnd = True
 			return 0
-		except IndexError:
+		except (ValueError , IndexError):
 			Lock.release()
 			Flag = True
 			Lock.acquire()
@@ -94,6 +95,7 @@ try:
 	res_out = open(root+"ip_ava.txt", "w")
 	gevent.joinall(jobs)
 	res_out.write(json.dumps(Succ))
+	HTMLGEN.HTMLGEN(json.dumps(Succ), open(root+"ip.txt", "w")).close()
 
 	
 except:

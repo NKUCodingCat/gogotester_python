@@ -1,4 +1,4 @@
-import re, os, numpy
+import re, os
 root = os.path.split(os.path.realpath(__file__))[0]+"/"
 IPPool = []
 InitFlag = False
@@ -57,4 +57,6 @@ def GetGGCIP(File = (root+"ggc.txt")):
 		pass
 	else:
 		IPPool = GGCIPS(File) 
-	return [("%s.%s.%s.%s")%tuple(i) for i in IPPool]
+	return list(set([("%s.%s.%s.%s")%tuple(i) for i in IPPool]))
+if __name__ == "__main__":
+	print GetGGCIP()
