@@ -12,6 +12,7 @@ import gogo_cfg
 cfg = gogo_cfg.gogo_cfg()
 sock_thread_num = float(cfg.get("TPool", "sock_thread_num"))
 ssl_thread_num = float(cfg.get("TPool", "ssl_thread_num"))
+ip_limit = float(cfg.get("Num","Limit"))
 import gevent
 from gevent import coros
 Lock = coros.Semaphore()
@@ -27,6 +28,10 @@ Succ = []
 Flag = False
 InProcess = []
 isEnd = False
+Stop_the_World = False
+
+
+
 def Socket_TestNext(ippool):
 	global Flag, Wait_for_SSL, Succ, InProcess, isEnd 
 	Lock.acquire()
@@ -57,6 +62,10 @@ def Socket_TestNext(ippool):
 			InProcess.pop()
 			Lock.release()
 			return 0
+	Lock.acquire()
+	InProcess.pop()
+	Lock.release()
+	return 0
 def SSL_TestNext():
 	global Flag, Wait_for_SSL, Succ, InProcess
 	while True:
@@ -84,10 +93,24 @@ def SSL_TestNext():
 		gevent.sleep()
 	return 
 
-		
+def LimitCheck(limit, ippool):
+	if limit <= 0:
+		return
+	else:
+		global Flag, Wait_for_SSL, Succ, InProcess, isEnd 
+		while((len(Succ) < limit) and (len(InProcess)!=0)):
+			gevent.sleep()
+		Wait_for_SSL = []
+		ippool = []
+		isEnd = True
+		Flag = True
+		#print "Limit UP"
+		return
+	
 
 jobs = [gevent.spawn(Socket_TestNext, ippool) for i in range(int(sock_thread_num))]  
 jobs.extend([gevent.spawn(SSL_TestNext ) for i in range(int(ssl_thread_num))])
+jobs.extend([gevent.spawn(LimitCheck, ip_limit, ippool),])
 
 #print jobs
 try:
@@ -103,7 +126,3 @@ except:
 finally:
 	log.close()
 	res_out.close()
-#print len(Succ),"/",len(ippool)
-
-
-#print jobs
