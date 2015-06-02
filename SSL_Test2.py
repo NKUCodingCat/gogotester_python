@@ -1,3 +1,4 @@
+#coding=utf-8
 from gevent import monkey
 monkey.patch_os()
 monkey.patch_socket()
@@ -9,6 +10,13 @@ import platform
 import random
 import re
 import gogo_cfg
+
+import IPy
+
+
+"""
+IPV6 Complete
+"""
 
 cfg = gogo_cfg.gogo_cfg()
 socket_timeout = float(cfg.get("SSL", "socket_timeout"))
@@ -42,11 +50,23 @@ def SSL_Test(ip):
 	if not , return None
 	"""
 	try:
-		s = socket.socket()  
+		if IPy.IP(ip).version() == 4:
+			s = socket.socket()  
+		elif IPy.IP(ip).version() == 6:
+			s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)  
+		else:
+			print "There is an invalid string in SSL_Test Func:",ip
+			return None
+	except KeyboardInterrupt:
+		raise
+	except:
+		#raise
+		return None
+	try:     #Gernel
 		s.settimeout(socket_timeout)  
 		c = ssl.wrap_socket(s, cert_reqs=ssl.CERT_REQUIRED, ca_certs=root+'cacert.pem')  
 		c.settimeout(ssl_timeout)  
-		c.connect((ip, 443))  
+		c.connect((ip, 443))
 		cert = c.getpeercert()  
 		c.write("HEAD /search?q=g HTTP/1.1\r\nHost: www.google.com.hk\r\n\r\nGET /%s HTTP/1.1\r\nHost: azzvxgoagent%s.appspot.com\r\nConnection: close\r\n\r\n"%(platform.python_version() , random.randrange(7)))
 		res = c.read(2048)
@@ -64,6 +84,7 @@ def SSL_Test(ip):
 if __name__ == "__main__":
 	import ggc_ip, os
 	root = os.path.split(os.path.realpath(__file__))[0]+"/"
+	print SSL_Test("2404:6800:4008:c03::8b")
 	ippool = ggc_ip.GetGGCIP(root+"ggc_test.txt")
 	for i in ippool:
 		print SSL_Test(i)

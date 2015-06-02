@@ -2,15 +2,21 @@ gogotester_python
 ===============
 [gogotester](https://github.com/azzvx/gogotester)的(非官方)python命令行版本，唯一的作用就是扫描在天朝范围内能用的Google IP
 
+>正在努力加入IPv6支持……大概考完试以后就能写完吧 Branch:ipv6_Compatible
+
+>正在考虑重写GGC\_IP.py和Main\_Gevent.py
+
 ### 警告：alpha版本测试的时候代码有一定概率卡死，重写SSL_Test以后未发现卡死现象，但是并不代表不会有卡死的可能 ###
 
 ## User Guide ##
-代码在windows上开发，环境为gevent-1.0.1+python-2.7.7
+代码在windows上开发，环境为IPy-0.83+gevent-1.0.1+python-2.7.7
 如果在python-2.7.8及以下版本中使用请先安装pip然后
 
 `pip install gevent`
 
-如果是python-2.7.9+就可以直接安装gevent啦
+`pip install IPy`
+
+如果是python-2.7.9+就可以直接安装gevent和IPy啦
 
 > 用pip的原因是windows下面pip能愉快的装上gevent╮(￣▽￣")╭ 
 
