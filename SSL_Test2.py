@@ -84,7 +84,9 @@ def SSL_Test(ip):
 if __name__ == "__main__":
 	import ggc_ip, os
 	root = os.path.split(os.path.realpath(__file__))[0]+"/"
-	print SSL_Test("2404:6800:4008:c03::8b")
+	#print SSL_Test("2404:6800:4008:c03::8b")
 	ippool = ggc_ip.GetGGCIP(root+"ggc_test.txt")
 	for i in ippool:
-		print SSL_Test(i)
+		for  j in i:
+		
+			print SSL_Test(str(j))

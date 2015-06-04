@@ -1,62 +1,110 @@
-import re, os
-root = os.path.split(os.path.realpath(__file__))[0]+"/"
+import re, os,  itertools
+
+import IPy
+
+import Con_Test
+
 IPPool = []
 InitFlag = False
-def ipList(Str):
-	S = re.split("\.", Str)
-	if len(S) != 4:
-		raise ValueError, "It Should be an ip-like String But we got \"%s\""%Str
-	res = []
-	for i in S:
-		try:
-			ran = int(i)
-			if ran>=0 and ran<=255:
-				res.append([ran,])
-			else:
-				raise ValueError, "It Should be an ip-like String But we got \"%s\""%Str
-		except:
-			ran = re.split("-", i)
-			if len(ran) != 2:
-				raise ValueError, "It Should be an ip-like String But we got \"%s\""%Str
-			for j in ran:
-				try:
-					j = int(j)
-				except:	
-					raise ValueError, "It Should be an ip-like String But we got \"%s\""%Str
-				if not (j>=0 and j<=255):
-					raise ValueError, "It Should be an ip-like String But we got \"%s\""%Str
-			if int(ran[0])>int(ran[1]):
-				raise ValueError, "It Should be an ip-like String But we got \"%s\""%Str
-			res.append(range(int(ran[0]), int(ran[1])+1 ))
-	return res
-def ListAll(Array, Src):
-	try:
-		Next = Src[0]
-	except:
-		return Array	
-	New = []
-	for NextNum in Next:
-		for i in Array:
-			New.extend([i+[NextNum, ]])
-	if Src[1:]:
-		return ListAll(New, Src[1:])
+root = os.path.split(os.path.realpath(__file__))[0]+"/"
+
+def v4_Tran(String):
+	"""
+	In V4 you can write ip range like:
+		/ None 1.2.3.0
+		/prefix 1.2.3.0/24
+		/netmask 1.2.3.0/255.255.255.0
+		-lastip 1.2.3.0-1.2.3.255
+		-(I dont know how to express it ) 1.2.0-3.0-255
+		
+		But All of those should follow CIDR
+	"""
+	if re.findall(":",String):
+		raise ValueError, "Its an v6"
+	if re.findall("(\d+(-\d+)?\.){3}(\d+-\d+)", String):
+		if len(re.split("\.", String) ) == 4:
+			F = re.split("\.", String)
+			G = []
+			for i in F:
+				if len(re.split("-",i))==2:
+					G.append(re.split("-",i))
+					break
+				elif len(re.split("-",i))==1:
+					G.append([i,])
+				else:
+					raise ValueError
+			for j in range(4-len(G)):
+				G.append(["0","255"])
+			A = []
+			B = []
+			for k in G:
+				if len(k ) == 1:
+					A.append(k[0])
+					B.append(k[0])
+				else:
+					A.append(k[0])
+					B.append(k[1])
+			#print ("%s."*3+"%s"+"-"+"%s."*3+"%s")%tuple(A+B)
+			res =  IPy.IP(("%s."*3+"%s"+"-"+"%s."*3+"%s")%tuple(A+B))
+		else:
+			raise ValueError
 	else:
-		return New
-def GGCIPS(File = (root+"ggc.txt")):
+		try:
+			res = IPy.IP(String)
+		except:
+			raise
+	return res	
+				
+	
+def v6_Tran(String):
+	"""
+	Its just IPy.IP Copy
+	"""
+	return IPy.IP(String)
+
+def GGCIPS(File):
 	try:
 		F = open(File)
 	except:
 		raise IOError, "%s is not exist"%File
-	IPS =  re.split("\s+",F.read())
-	RES = []
+	IPS =  re.split("[\r\n]+",F.read())
+	V4s = []
+	V6s = []
 	for IPD in IPS:
-		RES.extend(ListAll([[]], ipList(IPD)))
-	return RES
+		IPD = re.sub("\s+","", IPD)
+		if len(IPD) == 0:
+			continue
+		if IPD[0] == "#":
+			continue
+		try:
+			V4s.append(v4_Tran(IPD))
+		except:
+			
+			try:
+				V6s.append(v6_Tran(IPD))
+			except:
+				print(IPD) 
+				raise
+	#print V4s, V6s
+	return [IPy.IPSet(V4s), IPy.IPSet(V6s)]
 def GetGGCIP(File = (root+"ggc.txt")):
+	global InitFlag, IPPool 
 	if InitFlag:
 		pass
 	else:
 		IPPool = GGCIPS(File) 
-	return list(set([("%s.%s.%s.%s")%tuple(i) for i in IPPool]))
+		C = Con_Test.Con_Test()
+		if not C["v4"]:
+			IPPool[0] = []
+			print "IPv4 is not avalible"
+		if not C["v6"]:
+			IPPool[1] = []
+			print "IPv6 is not avalible"
+		IPPool = [list(itertools.chain.from_iterable(j)) for j in map(lambda x:[list(i) for i in x], IPPool)]
+		InitFlag = True
+	return IPPool[:]
 if __name__ == "__main__":
-	print GetGGCIP()
+	#print GetGGCIP(root + "ggc.txt")
+	print len(GetGGCIP(root + "ggc.txt")[0])
+	print len(GetGGCIP(root + "ggc.txt")[1])
+
