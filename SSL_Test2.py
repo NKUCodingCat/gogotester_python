@@ -18,6 +18,12 @@ import IPy
 IPV6 Complete
 """
 
+"""
+Hack for Py 2.7.9+
+"""
+import SSLHack
+SSLHack.SSLHACK()
+
 cfg = gogo_cfg.gogo_cfg()
 socket_timeout = float(cfg.get("SSL", "socket_timeout"))
 ssl_timeout = float(cfg.get("SSL", "ssl_timeout"))
