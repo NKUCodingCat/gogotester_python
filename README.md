@@ -2,15 +2,21 @@ gogotester_python
 ===============
 [gogotester](https://github.com/azzvx/gogotester)的(非官方)python命令行版本，唯一的作用就是扫描在天朝范围内能用的Google IP
 
->正在努力加入IPv6支持……大概考完试以后就能写完吧 Branch:ipv6_Compatible
+##尼玛不好好复习还写代码！##
 
->正在考虑重写GGC\_IP.py和Main\_Gevent.py
 
 ### 警告：alpha版本测试的时候代码有一定概率卡死，重写SSL_Test以后未发现卡死现象，但是并不代表不会有卡死的可能 ###
 
 ### 另一个警告：由于把IP全部展开所以内存消耗其实还是很恐怖的……10wIP的话大概能烧掉600M……用树莓派的小伙伴们请小心 ###
 
 ######  我得研究一下怎么节约内存 ######
+
+
+2015.06.07 凌晨更新0.5.0α版，测了一下10W v4IP 和 3W v6IP 的情况，把IP转为int存储以后内存峰值占用250M-，稳定运行160M+
+
+但是说实在的我觉得这样会比较烧CPU……真的……不过Gevent本来就烧，话说建议SSL的线程数是Socket的10%，因为真的没那么多能连上的IP
+
+三天之内没什么大脑洞我就Merge了╮(￣▽￣")╭ 
 
 ## User Guide ##
 代码在windows上开发，环境为IPy-0.83+gevent-1.0.1+python-2.7.7
@@ -27,7 +33,6 @@ gogotester_python
 然后进入命令行，`python Main_Gevent.py` 就好啦~~~ 
 
 ##Others##
-
 
 
 嘛……虽然说*nix可以用mono跑.net但是python毕竟是自带的库，也就少了很多奇怪的麻烦
