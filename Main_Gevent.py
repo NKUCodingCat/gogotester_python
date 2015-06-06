@@ -1,5 +1,8 @@
 #coding=utf-8
 #ippool will like [ [ipv4 ips] , [v6 ips] ]
+
+
+
 import gevent
 from gevent import coros
 from gevent import monkey
@@ -22,8 +25,8 @@ v4_limit = float(cfg.get("Num","Limit"))
 v6_limit = float(cfg.get("Num","Limit_v6"))
 Lock = coros.Semaphore()
 root = os.path.split(os.path.realpath(__file__))[0]+"/"
-ippool = ggc_ip.GetGGCIP(root+"ggc.txt")
-ippool = [list(itertools.chain.from_iterable(j)) for j in map(lambda x:[list(i) for i in x], ippool)]
+ippool = ggc_ip.GGC_IP(root+"ggc.txt").IPPool
+#ippool = [list(itertools.chain.from_iterable(j)) for j in map(lambda x:[list(i) for i in x], ippool)]
 Last_time = time.time()
 
 #ippool[0] is v4 pool, ippool[1] is v6 pool
@@ -49,12 +52,20 @@ STOP ={
 Wait_for_SSL = []
 Succ = []
 
+
+import IPy
+def IntToIPString(Int):
+	return str(IPy.IP(Int))
+
 def STATOut():
 	global STAT, STOP
 	for i in STAT.keys():
 		for j in STAT[i].keys():
 			print "%s_%s: %s /"%(i,j,STAT[i][j]) , 
 		print "%s_STOP: %s"%(i,STOP[i])
+	
+	import gc  
+	gc.collect()
 	print time.ctime()
 	
 
@@ -101,10 +112,10 @@ def Socket_TestNext(ippool, isv4 = True):
 		try:
 			Lock.acquire()
 			if isv4:
-				ip = ippool[0].pop(random.randrange(len(ippool[0])))
+				ip = IntToIPString(ippool[0].pop(random.randrange(len(ippool[0]))))
 				STAT["v4"]["Tested"] += 1
 			else:
-				ip = ippool[1].pop(random.randrange(len(ippool[1])))
+				ip = IntToIPString(ippool[1].pop(random.randrange(len(ippool[1]))))
 				STAT["v6"]["Tested"] += 1
 			Lock.release()
 			gevent.sleep()
@@ -182,6 +193,7 @@ try:
 	log = open(root+"log.log", "w")
 	jobs = [gevent.spawn(LimitCheck),]+[gevent.spawn(Socket_TestNext,ippool) for i in range(int(sock_thread_num)/2)]+[gevent.spawn(Socket_TestNext,ippool, False) for i in range(int(sock_thread_num)-int(sock_thread_num)/2)] +[gevent.spawn(SSL_TestNext) for i in range(int(ssl_thread_num))]
 	gevent.joinall(jobs)
+	
 
 finally:
 	HTMLGEN.HTMLGEN(json.dumps([i for i in Succ if IPy.IP(i[0][1]).version() == 4]), open(root+"ip_4.txt", "w")).close()
