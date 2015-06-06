@@ -70,7 +70,7 @@ def SSL_Test(ip):
 		return None
 	try:     #Gernel
 		s.settimeout(socket_timeout)  
-		c = ssl.wrap_socket(s, cert_reqs=ssl.CERT_REQUIRED, ca_certs=root+'cacert.pem')  
+		c = ssl.wrap_socket(s, cert_reqs=ssl.CERT_REQUIRED, ca_certs=root+'cacert.pem', ciphers='ECDHE-RSA-AES128-SHA')   
 		c.settimeout(ssl_timeout)  
 		c.connect((ip, 443))
 		cert = c.getpeercert()  
@@ -90,9 +90,8 @@ def SSL_Test(ip):
 if __name__ == "__main__":
 	import ggc_ip, os
 	root = os.path.split(os.path.realpath(__file__))[0]+"/"
+	ippool = ggc_ip.GGC_IP(root+"ggc_test.txt").IPPool
 	#print SSL_Test("2404:6800:4008:c03::8b")
-	ippool = ggc_ip.GetGGCIP(root+"ggc_test.txt")
 	for i in ippool:
 		for  j in i:
-		
-			print SSL_Test(str(j))
+			print SSL_Test(str(IPy.IP(j)))
