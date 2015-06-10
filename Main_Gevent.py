@@ -31,6 +31,9 @@ Last_time = time.time()
 
 #ippool[0] is v4 pool, ippool[1] is v6 pool
 
+import logging  
+logging.basicConfig(level=logging.DEBUG,  format='%(levelname)s - [%(asctime)s] %(message)s',  datefmt='%a, %d %b %Y %H:%M:%S' )  
+
 
 STAT = {
 	"v4":{
@@ -59,25 +62,28 @@ def IntToIPString(Int):
 
 def STATOut():
 	global STAT, STOP
+	
 	for i in STAT.keys():
+		Str = "IP pool Status: "
 		for j in STAT[i].keys():
-			print "%s_%s: %s /"%(i,j,STAT[i][j]) , 
-		print "%s_STOP: %s"%(i,STOP[i])
+			Str +=  "%s_%s: %s, "%(i,j,STAT[i][j]) 
+		logging.info(Str[:-2])
 	
 	import gc  
 	gc.collect()
-	print time.ctime()
 	
 
 def LimitCheck():
 	global ippool, STAT, v4_limit, v6_limit, Lock, STOP
 	if v4_limit <= 0:
 		ippool[0] = []
+		STAT["v4"]["Total"] = 0
 		STOP["v4"] = True
 	if v6_limit <= 0:
 		ippool[1] = []
+		STAT["v6"]["Total"] = 0
 		STOP["v6"] = True
-	print "Start Check"
+	logging.info("Watch Dog Start Working")
 	while (len(ippool[0]) > 0 or len(ippool[1]) > 0):
 		Lock.acquire()
 		if STAT["v4"]["Succ"] >=v4_limit:
@@ -92,7 +98,7 @@ def LimitCheck():
 		STOP["v4"] = True
 	if len(ippool[1]) <= 0:
 		STOP["v6"] = True
-	print "Limit UP"
+	logging.info("Work Done")
 	print STOP
 	return 
 	
@@ -127,10 +133,12 @@ def Socket_TestNext(ippool, isv4 = True):
 			gevent.sleep()
 		except KeyboardInterrupt:
 			Lock.release()
+			logging.error("KeyboardInterrupt")  
 			STOP["v4"] = True
 			STOP["v6"] = True
 			return 
-		except (ValueError , IndexError):	
+		except (ValueError , IndexError):
+			logging.info("Thread Switced")  
 			if STA == True: #原来是v4
 				if isv4 == True: #没变
 					isv4 = False
@@ -169,17 +177,18 @@ def SSL_TestNext():
 			if(STOP["v4"] and STOP["v6"]):
 				return
 		except KeyboardInterrupt:
+			logging.error("KeyboardInterrupt")  
 			Lock.release()
 			STOP["v4"] = True
 			STOP["v6"] = True
 			return 0
 		else:
 			gevent.sleep()
-			print "Test", Data[1]
+			#logging.info("SSL Test %s"%Data[1])
 			SSLRes = SSL_Test2.SSL_Test(Data[1])
-			print "Tested %s"%Data[1], time.time()
 			if SSLRes:
-				print json.dumps(SSLRes)
+				#print json.dumps(SSLRes)
+				logging.info("%s is avaliable, cert: %s, delay: %.4f "%(Data[1],SSLRes["cname"],Data[2]))
 				log.write(json.dumps(SSLRes)+"\n")
 				Lock.acquire()
 				Succ.append((Data , SSLRes))
