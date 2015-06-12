@@ -4,7 +4,8 @@ import IPy
 
 import Con_Test
 class GGC_IP:
-	root = os.path.split(os.path.realpath(__file__))[0]+"/"
+	import RootPath
+	root = RootPath.RootPath()
 	def __init__(self, File=root + "ggc.txt"):
 		self.IPPool = self.GGCIPS(File) 
 		C = Con_Test.Con_Test()

@@ -14,5 +14,6 @@ def HTMLGEN(Json, File):
 
 
 if __name__ == "__main__":
-	root = os.path.split(os.path.realpath(__file__))[0]+"/"
+	import RootPath
+	root = RootPath.RootPath()
 	HTMLGEN(open(root+"ip_ava.txt").read(), open(root+"ip.txt", "w"))

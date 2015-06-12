@@ -5,7 +5,6 @@ monkey.patch_socket()
 monkey.patch_ssl()
 import socket  
 import ssl  
-import os
 import platform
 import random
 import re
@@ -28,7 +27,8 @@ cfg = gogo_cfg.gogo_cfg()
 socket_timeout = float(cfg.get("SSL", "socket_timeout"))
 ssl_timeout = float(cfg.get("SSL", "ssl_timeout"))
 
-root = os.path.split(os.path.realpath(__file__))[0]+"/"
+import RootPath
+root = RootPath.RootPath()
 RxResult = re.compile("""^(HTTP/... (\d+).*|Server:\s*(\w.*))$""", re.IGNORECASE|re.MULTILINE)
 
 def Par_res(String):
@@ -89,7 +89,8 @@ def SSL_Test(ip):
 		return None
 if __name__ == "__main__":
 	import ggc_ip, os
-	root = os.path.split(os.path.realpath(__file__))[0]+"/"
+	import RootPath
+	root = RootPath.RootPath()
 	ippool = ggc_ip.GGC_IP(root+"ggc_test.txt").IPPool
 	#print SSL_Test("2404:6800:4008:c03::8b")
 	for i in ippool:

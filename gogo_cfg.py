@@ -1,6 +1,7 @@
 import sys, os
 import ConfigParser
-root = os.path.split(os.path.realpath(__file__))[0]+"/"
+import RootPath
+root = RootPath.RootPath()
 class gogo_cfg:
 	def __init__(self, config_file_path=(root+"config.ini")):
 		self.cf = ConfigParser.ConfigParser()
