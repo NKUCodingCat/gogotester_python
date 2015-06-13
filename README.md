@@ -9,7 +9,7 @@ gogotester_python
 ## User Guide ##
 代码在windows上开发，环境为IPy-0.83+gevent-1.0.1+python-2.7.7
 
-windows的小伙伴可以直接点开/windows然后点击gogotester_python.exe
+windows的小伙伴可以直接点开/windows文件夹然后点击gogotester_python.exe
 
 \*nix的话可以试着在/windows文件夹下面`python Main_Gevent.py`, 不行的话请直接运行源代码
 
@@ -63,4 +63,4 @@ GAE配置文件自动生成什么的还在计划中……核心已经写好了�
 
 2015.06.07 凌晨更新0.5.0α版，测了一下10W v4IP 和 3W v6IP 的情况，把IP转为int存储以后内存峰值占用250M-，稳定运行160M+
 
-但是说实在的我觉得这样会比较烧CPU……真的……不过Gevent本来就烧，话说建议SSL的线程数是Socket的10%，因为真的没那么多能连上的IP
+(￣▽￣") 如果氖的IP库比较多可用的话建议SSL线程数是socket的20%或者30%……嗯反正多一点少一点也没啥╮(￣▽￣")╭ 

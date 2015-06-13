@@ -1,15 +1,21 @@
 #coding=utf-8
 #ippool will like [ [ipv4 ips] , [v6 ips] ]
 
-Ver = "0.7.0 alpha"
+Ver = "0.7.1 alpha"
 
 import sys
 import os
 import glob
+import sysconfig
 
 reload(sys).setdefaultencoding('UTF-8')
 sys.dont_write_bytecode = True
+
 sys.path += glob.glob('%s/*.egg' % os.path.dirname(os.path.abspath(__file__)))
+sys.path += [os.path.abspath(os.path.join(__file__, '../packages.egg/%s' % x)) for x in ('noarch', sysconfig.get_platform().split('-')[0])]
+sys.path += glob.glob('%s/*.zip' % os.path.dirname(os.path.abspath(__file__)))
+sys.path+=[os.path.dirname(os.path.abspath(__file__)), ]
+
 
 import gevent
 from gevent import coros
