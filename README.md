@@ -2,6 +2,8 @@ gogotester_python
 ===============
 [gogotester](https://github.com/azzvx/gogotester)的(非官方)python命令行版本，唯一的作用就是扫描在天朝范围内能用的Google IP
 
+戳这个下载→[GoGoTester_Python_Ver_Download](https://nodeload.github.com/NKUCodingCat/gogotester_python/legacy.zip/master)
+
 ##尼玛不好好复习还写代码！##
 
 嗯结构求不挂，还有毛概
@@ -81,6 +83,6 @@ GAE配置文件自动生成什么的还在计划中……核心已经写好了�
 
 嘛算了反正有钱上mac那就再花点钱买VPN吧ヾ(￣▽￣)~
 
-如果捕捉到不存在ECD
+如果捕捉到不存在ECDHA那啥的加密错误就尝试cipher=None的链接，这样会忽略掉GVS服务器
 
 以上~
