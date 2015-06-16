@@ -4,14 +4,22 @@ gogotester_python
 
 ##尼玛不好好复习还写代码！##
 
-嗯结构求不挂
+嗯结构求不挂，还有毛概
 
 ## User Guide ##
 代码在windows上开发，环境为IPy-0.83+gevent-1.0.1+python-2.7.7
 
-windows的小伙伴可以直接点开/windows文件夹然后点击gogotester_python.exe
+windows的小伙伴可以直接点开/packed文件夹然后点击gogotester_python.exe
 
-\*nix的话可以试着在/windows文件夹下面`python Main_Gevent.py`, 不行的话请直接运行源代码
+\*nix的话可以试着在/packed文件夹下面`python Main_Gevent.py`, 不行的话请直接运行源代码
+
+Ver 0.7.2 α 版本
+
+**Windows XP + 可用**
+
+**Ubuntu 14.04+, lubuntu 15.04 测试通过**
+
+欢迎提供兼容性信息~
 
 ### 如何运行源代码 ###
 
@@ -64,3 +72,15 @@ GAE配置文件自动生成什么的还在计划中……核心已经写好了�
 2015.06.07 凌晨更新0.5.0α版，测了一下10W v4IP 和 3W v6IP 的情况，把IP转为int存储以后内存峰值占用250M-，稳定运行160M+
 
 (￣▽￣") 如果氖的IP库比较多可用的话建议SSL线程数是socket的20%或者30%……嗯反正多一点少一点也没啥╮(￣▽￣")╭ 
+
+
+######  Mac OS X 中的问题 ######
+0.7.1 α 在10.10里面 SSL_Test2.py@Ln73 会有加密方式找不到的错误……
+
+我在纠结是用pyopenssl还是直接忽略这个错误……
+
+嘛算了反正有钱上mac那就再花点钱买VPN吧ヾ(￣▽￣)~
+
+如果捕捉到不存在ECD
+
+以上~

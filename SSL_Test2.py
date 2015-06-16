@@ -8,6 +8,7 @@ import ssl
 import platform
 import random
 import re
+import sys, traceback
 import gogo_cfg
 
 import IPy
@@ -50,19 +51,26 @@ def Par_res(String):
 		return None
 	else:
 		return status
+		
+		
+def BuildSocket(ip):
+	if IPy.IP(ip).version() == 4:
+		s = socket.socket()  
+	elif IPy.IP(ip).version() == 6:
+		s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)  
+	else:
+		print "There is an invalid string in SSL_Test Func:",ip
+		raise socket.error
+	return s
+	
+	
 def SSL_Test(ip):
 	"""
 	if this ip is available as GAE ip, the func will return like: {"ip": ip, "cname": CName, "Status": status}
 	if not , return None
 	"""
 	try:
-		if IPy.IP(ip).version() == 4:
-			s = socket.socket()  
-		elif IPy.IP(ip).version() == 6:
-			s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)  
-		else:
-			print "There is an invalid string in SSL_Test Func:",ip
-			return None
+		s = BuildSocket(ip)
 	except KeyboardInterrupt:
 		raise
 	except:
@@ -70,9 +78,21 @@ def SSL_Test(ip):
 		return None
 	try:     #Gernel
 		s.settimeout(socket_timeout)  
-		c = ssl.wrap_socket(s, cert_reqs=ssl.CERT_REQUIRED, ca_certs=root+'cacert.pem', ciphers='ECDHE-RSA-AES128-SHA')   
-		c.settimeout(ssl_timeout)  
-		c.connect((ip, 443))
+		try:
+			c = ssl.wrap_socket(s, cert_reqs=ssl.CERT_REQUIRED, ca_certs=root+'cacert.pem', ciphers='ECDHE-RSA-AES128-SHA')   
+			c.settimeout(ssl_timeout)  
+			c.connect((ip, 443))
+		except (socket.error, socket.timeout):
+			return None
+		except :
+			print "Warning: Some Unexcepted Error Occured: %s While Testing %s\nTry Another way to Connect......\n"%(sys.exc_info()[0], ip)
+			s = BuildSocket(ip)
+			s.settimeout(socket_timeout)  
+			c = ssl.wrap_socket(s, cert_reqs=ssl.CERT_REQUIRED, ca_certs=root+'cacert.pem')   
+			c.settimeout(ssl_timeout)  
+			c.connect((ip, 443))
+		
+			
 		cert = c.getpeercert()  
 		c.write("HEAD /search?q=g HTTP/1.1\r\nHost: www.google.com.hk\r\n\r\nGET /%s HTTP/1.1\r\nHost: azzvxgoagent%s.appspot.com\r\nConnection: close\r\n\r\n"%(platform.python_version() , random.randrange(7)))
 		res = c.read(2048)
@@ -81,7 +101,8 @@ def SSL_Test(ip):
 	except KeyboardInterrupt:
 		raise
 	except:
-		#raise
+		exc_type, exc_value, exc_traceback = sys.exc_info()
+		print "\nWarning: Some Unexcepted Error Occured: %s\nIP: %s maybe avaliable but we can not Test it by SSL\n"%("".join(traceback.format_exception(exc_type, exc_value,exc_traceback)), ip)
 		return None
 	if status:
 		return {"ip": ip, "cname": Cer, "Status": status}
