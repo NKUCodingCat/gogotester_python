@@ -6,17 +6,24 @@ import Con_Test
 class GGC_IP:
 	import RootPath
 	root = RootPath.RootPath()
-	def __init__(self, File=root + "ggc.txt"):
+	def __init__(self, File=root + "ggc.txt", ConnChk = True, IntIPPool = True):
 		self.IPPool = self.GGCIPS(File) 
-		C = Con_Test.Con_Test()
-		if not C["v4"]:
-			self.IPPool[0] = []
-			print "IPv4 is not avalible"
-		if not C["v6"]:
-			self.IPPool[1] = []
-			print "IPv6 is not avalible"
+		if ConnChk:
+			C = Con_Test.Con_Test()
+			if not C["v4"]:
+				self.IPPool[0] = []
+				print "IPv4 is not avalible"
+			if not C["v6"]:
+				self.IPPool[1] = []
+				print "IPv6 is not avalible"
+		else:
+			pass
 		print "Generating the IP pool.......Please Wait"
-		self.IPPool = [map(lambda x:x.int(), i) for i in [list(itertools.chain.from_iterable(j)) for j in map(lambda x:[list(i) for i in x], self.IPPool)]]
+		if IntIPPool:
+			self.IPPool = [map(lambda x:x.int(), i) for i in [list(itertools.chain.from_iterable(j)) for j in map(lambda x:[list(i) for i in x], self.IPPool)]]
+		else:
+			pass	
+		gc.collect()
 
 
 	def v4_Tran(self, String):
@@ -73,12 +80,13 @@ class GGC_IP:
 		"""
 		return IPy.IP(String)
 	
-	def GGCIPS(self, File):
+	def GGCIPS(self, File=root + "ggc.txt"):
 		try:
 			F = open(File)
 		except:
 			raise IOError, "%s is not exist"%File
 		IPS =  re.split("[\r\n]+",F.read())
+		F.close()
 		V4s = []
 		V6s = []
 		for IPD in IPS:
@@ -101,6 +109,6 @@ class GGC_IP:
 		
 if __name__ == "__main__":
 
-	GGC_IP().IPPool[0]
+	print len(GGC_IP().IPPool[0])
 	#print len(GetGGCIP(root + "ggc.txt")[1])
 
