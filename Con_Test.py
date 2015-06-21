@@ -13,7 +13,7 @@ def GetAdd(Name, Type):
 		return K[0]
 def Conn(ip, port=80):
 	return Socket_Test.Socket_Test(ip, port)[0]
-def Con_Test(v4 = "www.baidu.com", v6 = "www.ipv6.org.tw"):
+def Con_Test(v4 = "www.baidu.com", v6 = "ipv6.baidu.com"):
 	RES = {}
 	#v4
 	try:
