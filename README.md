@@ -4,9 +4,7 @@ gogotester_python
 
 戳这个下载→[GoGoTester_Python_Ver_Download](https://nodeload.github.com/NKUCodingCat/gogotester_python/legacy.zip/master)
 
-##尼玛不好好复习还写代码！##
-
-嗯结构求不挂，还有毛概
+#先看完README再用#
 
 ## User Guide ##
 代码在windows上开发，环境为IPy-0.83+gevent-1.0.1+python-2.7.7
@@ -62,6 +60,10 @@ GAE配置文件自动生成什么的还在计划中……核心已经写好了�
 #祝方校长【zhang】长【chang】命五十八#
 
 中国人民会记住您的
+
+##尼玛不好好复习还写代码！##
+
+嗯结构求不挂，还有毛概
 
 # 一些警告 #
 
