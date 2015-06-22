@@ -13,7 +13,7 @@ gogotester_python
 
 windows的小伙伴可以直接点开/packed文件夹然后点击gogotester_python.exe
 
-\*nix的话可以试着在/packed文件夹下面`python Main_Gevent.py`, 不行的话请直接运行源代码
+照着[用户指南](https://github.com/NKUCodingCat/gogotester_python/wiki/How-to-use-it-gracefully)做， 不行的话请直接运行源代码
 
 Ver 0.7.2 α 版本
 
