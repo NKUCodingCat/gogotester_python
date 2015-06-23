@@ -2,15 +2,15 @@
 from gevent import monkey
 monkey.patch_os()
 monkey.patch_socket()
-monkey.patch_ssl()
-import socket  
+monkey.patch_ssl() 
+import socket
 import ssl  
 import platform
 import random
 import re
 import sys, traceback
 import gogo_cfg
-
+import Socket_Test
 import IPy
 
 
@@ -50,27 +50,16 @@ def Par_res(String):
 	if status == "NN":
 		return None
 	else:
-		return status
+		return status		
 		
-		
-def BuildSocket(ip):
-	if IPy.IP(ip).version() == 4:
-		s = socket.socket()  
-	elif IPy.IP(ip).version() == 6:
-		s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)  
-	else:
-		print "There is an invalid string in SSL_Test Func:",ip
-		raise socket.error
-	return s
-	
-	
+
 def SSL_Test(ip):
 	"""
 	if this ip is available as GAE ip, the func will return like: {"ip": ip, "cname": CName, "Status": status}
 	if not , return None
 	"""
 	try:
-		s = BuildSocket(ip)
+		s = Socket_Test.BuildSocket(ip)
 	except KeyboardInterrupt:
 		raise
 	except:

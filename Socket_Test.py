@@ -26,6 +26,7 @@ def BuildSocket(ip):
 	else:
 		print "There is an invalid string in SSL_Test Func:",ip
 		raise socket.error
+	s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 	return s
 def Socket_Test(IP, Port = 443):
 	STA = time.time()
