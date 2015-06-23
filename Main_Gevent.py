@@ -1,7 +1,7 @@
 #coding=utf-8
 #ippool will like [ [ipv4 ips] , [v6 ips] ]
 
-Ver = "0.7.1 alpha"
+Ver = "0.9.0 alpha"
 
 import sys
 import os

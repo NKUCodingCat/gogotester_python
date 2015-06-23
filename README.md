@@ -13,11 +13,13 @@ windows的小伙伴可以直接点开/packed文件夹然后点击gogotester_pyth
 
 照着[用户指南](https://github.com/NKUCodingCat/gogotester_python/wiki/How-to-use-it-gracefully)做， 不行的话请直接运行源代码
 
-Ver 0.7.2 α 版本
+Ver 0.9.0 α 版本
 
-**Windows XP + 可用**
+**Windows Vista + 全部功能可用 (XP只能使用IPv4)**
 
 **Ubuntu 14.04+, lubuntu 15.04 测试通过**
+
+由于XP下对IPv6高并发的不支持，建议换个系统，嗯
 
 欢迎提供兼容性信息~
 
