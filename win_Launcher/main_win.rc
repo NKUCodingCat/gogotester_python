@@ -1,0 +1,28 @@
+2 ICON "s.ico"
+1 VERSIONINFO
+	FILEVERSION     2,3,3,3
+	PRODUCTVERSION  2,3,3,3
+	FILEOS 0x4L
+	BEGIN
+	BLOCK "StringFileInfo"
+	BEGIN
+		BLOCK "080404E4"
+		BEGIN
+		VALUE "CompanyName", "NKUCodingCat Co.Ltd"
+		VALUE "FileDescription", "gogotester_python Project General Launcher"
+		VALUE "FileVersion", "1.0"
+		VALUE "InternalName", "Launcher on Windows"
+		VALUE "LegalCopyright", "GPLv2"
+		VALUE "OriginalFilename", ""
+		VALUE "ProductName", "gogotester_python"
+		VALUE "ProductVersion", "2.3.3 build 42"
+		VALUE "Comments", ""
+		END
+	END
+	
+	BLOCK "VarFileInfo"
+		BEGIN
+			VALUE "Translation", 0x0804, 1252
+		END
+	END
+	
