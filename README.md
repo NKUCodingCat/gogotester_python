@@ -14,7 +14,9 @@ windows的小伙伴可以直接点开/packed文件夹然后点击gogotester_pyth
 
 当前: Ver 0.9.2 α
 
-**Windows Vista + 全部功能可用 (XP只能使用IPv4, 默认ipv6扫描为关闭状态，如有需要请手动开启)**
+**默认ipv6扫描为关闭状态，如有需要请手动开启**
+
+**Windows Vista + 全部功能可用 (XP只能使用IPv4)**
 
 **Ubuntu 14.04+, lubuntu 15.04 测试通过**
 
