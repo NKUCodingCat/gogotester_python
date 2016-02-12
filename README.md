@@ -7,14 +7,14 @@ gogotester_python
 #先看完README再用#
 
 ## User Guide ##
-代码在windows上开发，环境为IPy-0.83+gevent-1.0.1+python-2.7.7
+代码在windows上开发，环境为IPy-0.83+gevent-1.0.1+python-2.7.7，如果需要ipv6请点击[这个](http://test-ipv6.com/)手动检查当前环境是否可以使用ipv6，虽然ipv6上谷歌速度很快然而国内好像除了高校和科研单位基本就没什么ipv6资源了。
 
 windows的小伙伴可以直接点开/packed文件夹然后点击gogotester_python.exe
 照着[用户指南](https://github.com/NKUCodingCat/gogotester_python/wiki/How-to-use-it-gracefully)做， 不行的话请直接运行源代码，*nix请直接运行源代码
 
-当前: Ver 0.9.0 α
+当前: Ver 0.9.2 α
 
-**Windows Vista + 全部功能可用 (XP只能使用IPv4)**
+**Windows Vista + 全部功能可用 (XP只能使用IPv4, 默认ipv6扫描为关闭状态，如有需要请手动开启)**
 
 **Ubuntu 14.04+, lubuntu 15.04 测试通过**
 
