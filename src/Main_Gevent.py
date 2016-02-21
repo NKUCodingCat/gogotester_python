@@ -29,13 +29,14 @@ import gogo_cfg
 import RootPath
 
 cfg = gogo_cfg.gogo_cfg()
+Protocol_chk =  False if not int(cfg.get("Check_IP_Protocol", "Check")) else True
 sock_thread_num = float(cfg.get("TPool", "sock_thread_num"))
 ssl_thread_num = float(cfg.get("TPool", "ssl_thread_num"))
 v4_limit = float(cfg.get("Num","Limit"))
 v6_limit = float(cfg.get("Num","Limit_v6"))
 Lock = coros.Semaphore()
 root = RootPath.RootPath()
-ippool = ggc_ip.GGC_IP(root+"ggc.txt").IPPool
+ippool = ggc_ip.GGC_IP(root+"ggc.txt", Protocol_chk).IPPool
 Last_time = time.time()
 
 #ippool[0] is v4 pool, ippool[1] is v6 pool
@@ -48,12 +49,14 @@ STAT = {
 	"v4":{
 		"Total":len(ippool[0]),
 		"Tested":0,
-		"Succ":0
+		"Succ":0,
+		"Target":v4_limit
 	},
 	"v6":{
 		"Total":len(ippool[1]),
 		"Tested":0,
-		"Succ":0
+		"Succ":0,
+		"Target":v6_limit
 	}
 }
 STOP ={

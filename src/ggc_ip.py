@@ -6,9 +6,10 @@ import Con_Test
 class GGC_IP:
 	import RootPath
 	root = RootPath.RootPath()
-	def __init__(self, File=root + "ggc.txt", ConnChk = True, IntIPPool = True):
+	def __init__(self, File=root + "ggc.txt", Protocol_Chk = True, IntIPPool = True):
 		self.IPPool = self.GGCIPS(File) 
-		if ConnChk:
+		if Protocol_Chk:
+			print "Checking IP Protocol avaliblity"
 			C = Con_Test.Con_Test()
 			if not C["v4"]:
 				self.IPPool[0] = []
@@ -17,7 +18,7 @@ class GGC_IP:
 				self.IPPool[1] = []
 				print "IPv6 is not avalible"
 		else:
-			pass
+			print "=========================\r\n\r\n   WARNING: IP Protocol avaliblity has not been confirmed\r\n\r\n   Strongly suggest to open it unless you 100% believe that your network support IPv4 and IPv6.\r\n\r\n========================="
 		print "Generating the IP pool.......Please Wait"
 		if IntIPPool:
 			self.IPPool = [map(lambda x:x.int(), i) for i in [list(itertools.chain.from_iterable(j)) for j in map(lambda x:[list(i) for i in x], self.IPPool)]]
